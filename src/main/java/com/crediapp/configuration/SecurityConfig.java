@@ -12,9 +12,19 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import java.awt.*;
 import java.net.URI;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import org.springframework.context.annotation.Configuration;
 
 @Component
 @Configuration
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+)
+
 public class SecurityConfig {
 
     @Bean
@@ -60,5 +70,6 @@ public class SecurityConfig {
             System.err.println("No se pudo abrir Swagger automáticamente: " + e.getMessage());
         }
     }
+
 
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
     public AuthResponse login(LoginRequest request) {
 
         var userOptional = userRepository.findByUsername(request.getUsername());
