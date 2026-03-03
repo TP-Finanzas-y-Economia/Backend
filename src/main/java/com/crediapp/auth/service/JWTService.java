@@ -15,7 +15,7 @@ import java.util.function.Function;
 public class JWTService {
     private final SecretKey SECRET_KEY = Jwts.SIG.HS256.key().build();
 
-    // 1. Método que ya tenías (Crea el token)
+
     public String getToken(User user) {
         return Jwts.builder()
                 .subject(user.getUsername())
@@ -25,18 +25,18 @@ public class JWTService {
                 .compact();
     }
 
-    // 2. NUEVO: Extrae el nombre de usuario del token
+
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
     }
 
-    // 3. NUEVO: Verifica si el token es válido y pertenece al usuario
+
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    // Métodos auxiliares internos
+
     private boolean isTokenExpired(String token) {
         return extractExpiration(token).before(new Date());
     }

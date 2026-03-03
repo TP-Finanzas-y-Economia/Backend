@@ -39,7 +39,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthFilter) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
-                // NUEVO: Le decimos a Spring que no guarde sesiones, todo se maneja por Token
+
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
@@ -50,13 +50,13 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                // NUEVO: Ponemos nuestro filtro JWT justo antes del filtro de seguridad por defecto
+
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    // NUEVO: Este "traductor" busca al usuario en tu base de datos cuando el filtro lee el Token
+
     @Bean
     public UserDetailsService userDetailsService(UserRepository userRepository) {
         return username -> {
