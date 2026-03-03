@@ -7,10 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-
-public class AuthResponse {
-
-    private String mensaje;
-    private String token;
-
+public class BonoRequestDTO {
+    private Double valorVivienda;
+    private Boolean esSostenible;
+    private Boolean esIntegrador;
 }

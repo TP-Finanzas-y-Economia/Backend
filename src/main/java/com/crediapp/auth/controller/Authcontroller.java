@@ -3,9 +3,6 @@ import com.crediapp.auth.dto.*;
 import com.crediapp.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import com.crediapp.auth.dto.AuthResponse;
-import org.springframework.http.ResponseEntity;
-
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
