@@ -24,6 +24,7 @@ public class EntidadFinanciera {
     // Límites de vivienda (Importante para CRC)
     private Double precioMinVivienda;
     private Double precioMaxVivienda;
+    private Double porcentajeCuotaInicialMinima;
 
     private Boolean admiteCRC; // Identifica si opera con montos > 362,100
 }

@@ -11,8 +11,14 @@ import java.util.List;
 @Repository
 public interface EntidadFinancieraRepository extends JpaRepository<EntidadFinanciera, Integer> {
 
-    // Este metodo busca solo los bancos donde el usuario califica
-    @Query("SELECT e FROM EntidadFinanciera e WHERE :sueldo >= e.ingresoMinimoRequerido " +
-            "AND :precio >= e.precioMinVivienda AND :precio <= e.precioMaxVivienda")
-    List<EntidadFinanciera> findBancosDisponibles(@Param("sueldo") Double sueldo, @Param("precio") Double precio);
+    @Query("SELECT e FROM EntidadFinanciera e WHERE " +
+            ":sueldo >= e.ingresoMinimoRequerido AND " +
+            ":precio >= e.precioMinVivienda AND " +
+            ":precio <= e.precioMaxVivienda AND " +
+            "(:cuotaInicial / :precio * 100) >= e.porcentajeCuotaInicialMinima")
+    List<EntidadFinanciera> findBancosAptos(
+            @Param("sueldo") Double sueldo,
+            @Param("precio") Double precio,
+            @Param("cuotaInicial") Double cuotaInicial
+    );
 }

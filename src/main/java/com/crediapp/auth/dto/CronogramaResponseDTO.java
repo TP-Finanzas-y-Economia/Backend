@@ -13,4 +13,6 @@ public class CronogramaResponseDTO {
     private Double totalIntereses;
     private Double montoTotalPagado;
     private List<CuotaDTO> cuotas;
+    private Double van;
+    private Double tir;
 }

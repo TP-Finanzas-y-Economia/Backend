@@ -21,6 +21,14 @@ public class CronogramaService {
         // 1. Buscar la entidad financiera elegida
         EntidadFinanciera banco = entidadRepository.findById(req.getEntidadId())
                 .orElseThrow(() -> new RuntimeException("Banco no encontrado"));
+        //validacion de datos
+        Double porcentajeReal = (req.getCuotaInicial() / req.getValorVivienda()) * 100;
+        if (porcentajeReal < banco.getPorcentajeCuotaInicialMinima()) {
+            throw new RuntimeException("La cuota inicial enviada (" + porcentajeReal +
+                    "%) es menor al mínimo requerido por este banco (" +
+                    banco.getPorcentajeCuotaInicialMinima() + "%).");
+        }
+
 
         // 2. Validar Ingreso Mínimo
         if (req.getSueldoNeto() < banco.getIngresoMinimoRequerido()) {
@@ -101,13 +109,24 @@ public class CronogramaService {
                     .build());
         }
         Double tceaFinal = calcularTceaAnual(montoPrestamo, cuotas);
+        Double vanFinal = calcularVan(montoPrestamo, cuotas, banco.getTasaEfectivaAnual());
+
+        // 3. Calculamos la TIR Mensual (opcional, si quieres mostrarla aparte de la anualizada)
+        // La TCEA es la TIR anualizada. La TIR mensual sería:
+        Double tirMensual = Math.round((Math.pow(1 + (tceaFinal / 100), 1.0 / 12.0) - 1) * 10000.0) / 100.0;
+
+        // --- ACTUALIZAMOS EL BUILDER ---
         return CronogramaResponseDTO.builder()
                 .montoPrestamoNeto(redondear(montoPrestamo))
                 .totalIntereses(redondear(totalIntereses))
                 .montoTotalPagado(redondear(montoTotalPagado))
                 .tcea(tceaFinal)
+                .van(vanFinal)       //
+                .tir(tirMensual)     // (TIR Mensual)
                 .cuotas(cuotas)
                 .build();
+
+
     }
 
     private Double redondear(Double valor) {
@@ -137,4 +156,15 @@ public class CronogramaService {
         double tceaAnual = Math.pow(1 + tasaEstimada, 12) - 1;
         return Math.round(tceaAnual * 10000.0) / 100.0; // Devuelve ej: 11.45
     }
+
+    private Double calcularVan(Double montoPrestamo, List<CuotaDTO> cuotas, Double tea) {
+        Double tem = Math.pow(1 + (tea / 100), 1.0/12.0) - 1;
+        Double van = -montoPrestamo; // El préstamo es el flujo inicial (positivo para el usuario, pero negativo en la inversión)
+
+        for (CuotaDTO cuota : cuotas) {
+            van += cuota.getMontoCuota() / Math.pow(1 + tem, cuota.getNumeroCuota());
+        }
+        return redondear(van);
+    }
+
 }

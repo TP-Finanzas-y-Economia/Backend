@@ -26,13 +26,14 @@ public class CronogramaController {
     @Autowired
     private CronogramaService cronogramaService;
 
-    // PASO 1: Obtener bancos donde el usuario califica
+    //obtener bancos donde el usuario califica
     @GetMapping("/bancos-disponibles")
     public ResponseEntity<List<EntidadFinanciera>> obtenerBancos(
             @RequestParam Double sueldo,
-            @RequestParam Double precio) {
+            @RequestParam Double precio,
+            @RequestParam Double cuotaInicial) { // <-- Nuevo parámetro
 
-        List<EntidadFinanciera> bancos = entidadRepo.findBancosDisponibles(sueldo, precio);
+        List<EntidadFinanciera> bancos = entidadRepo.findBancosAptos(sueldo, precio, cuotaInicial);
         return ResponseEntity.ok(bancos);
     }
 
