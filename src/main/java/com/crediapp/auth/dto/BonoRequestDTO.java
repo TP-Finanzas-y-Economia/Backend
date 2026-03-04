@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class BonoRequestDTO {
     private Double valorVivienda;
-    private Boolean esSostenible; // Cambiar a Boolean (clase)
+    private Boolean esSostenible;
     private Boolean esIntegrador;
 }

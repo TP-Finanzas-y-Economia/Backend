@@ -25,4 +25,6 @@ public class CronogramaPagos {
     private Double montoPrestamoNeto; // ValorInmueble - (Inicial + Bono)
     private Double totalIntereses;
     private Double montoTotalPagado;
+    Double van;
+    Double tir;
 }

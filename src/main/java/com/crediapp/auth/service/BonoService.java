@@ -14,6 +14,9 @@ public class BonoService {
     private RangoBonoRepository repository;
 
     public Double calcularMontoBono(BonoRequestDTO request) {
+
+
+
         // 1. Buscamos el rango (R1-R5) según el precio de la vivienda
         RangoBono rango = repository.findRangoByPrecio(request.getValorVivienda())
                 .orElseThrow(() -> new EntityNotFoundException("El valor de la vivienda no aplica para los rangos del bono."));

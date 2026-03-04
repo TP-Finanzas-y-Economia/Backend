@@ -26,18 +26,26 @@ public class CronogramaController {
     @Autowired
     private CronogramaService cronogramaService;
 
-    //obtener bancos donde el usuario califica
-    @GetMapping("/bancos-disponibles")
-    public ResponseEntity<List<EntidadFinanciera>> obtenerBancos(
-            @RequestParam Double sueldo,
-            @RequestParam Double precio,
-            @RequestParam Double cuotaInicial) { // <-- Nuevo parámetro
 
-        List<EntidadFinanciera> bancos = entidadRepo.findBancosAptos(sueldo, precio, cuotaInicial);
+    @GetMapping("/bancos-disponibles")
+    public ResponseEntity<?> obtenerBancos(
+            @RequestParam(required = true) Double sueldo,
+            @RequestParam(required = true) Double precio,
+            @RequestParam(required = true) Double cuotaInicial) {
+
+        // Log para depuración en consola de IntelliJ
+        System.out.println("Buscando bancos para Sueldo: " + sueldo + ", Precio: " + precio + ", Inicial: " + cuotaInicial);
+
+        List<EntidadFinanciera> bancos = entidadRepo.findBancosDisponibles(sueldo, precio, cuotaInicial);
+
+        if (bancos.isEmpty()) {
+            return ResponseEntity.ok("No se encontraron bancos que coincidan con los criterios.");
+        }
+
         return ResponseEntity.ok(bancos);
     }
 
-    // PASO 2: Generar el cronograma detallado
+
     @PostMapping("/generar-cronograma")
     public ResponseEntity<?> generar(@RequestBody SimulacionRequestDTO request) {
         try {

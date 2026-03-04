@@ -15,10 +15,11 @@ public interface EntidadFinancieraRepository extends JpaRepository<EntidadFinanc
             ":sueldo >= e.ingresoMinimoRequerido AND " +
             ":precio >= e.precioMinVivienda AND " +
             ":precio <= e.precioMaxVivienda AND " +
-            "(:cuotaInicial / :precio * 100) >= e.porcentajeCuotaInicialMinima")
-    List<EntidadFinanciera> findBancosAptos(
+            "((:cuotaInicialMonto * 100.0) / :precio) >= e.porcentajeCuotaInicialMinima")
+    List<EntidadFinanciera> findBancosDisponibles(
             @Param("sueldo") Double sueldo,
             @Param("precio") Double precio,
-            @Param("cuotaInicial") Double cuotaInicial
-    );
+            @Param("cuotaInicialMonto") Double cuotaInicialMonto);
+
 }
+
